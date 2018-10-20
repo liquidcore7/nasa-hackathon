@@ -2,12 +2,14 @@ package com.knockoutsong.server.closeapproaches;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 public class ApproachEntity {
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MMM-dd HH:mm", Locale.ENGLISH);
     private static double secondsPerYear = 365.25 * 24 * 60 * 60;
-
 
     private String name;
     private double distance;
@@ -22,9 +24,8 @@ public class ApproachEntity {
     }
 
     public double getYearsFromEpoch() throws ParseException {
-        return ( format.parse(prettyTime).toInstant().getEpochSecond() -
-                    format.parse("1900-01-01 00:00").toInstant().getEpochSecond()
-        ) / secondsPerYear;
+        LocalDate diff = LocalDate.parse(prettyTime, format).minusYears(1900);
+        return diff.getYear() + diff.getDayOfYear() / 365.25;
     }
 
     public String getName() {

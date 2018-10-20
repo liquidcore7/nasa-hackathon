@@ -25,6 +25,6 @@ public class CollisionRegistratorTestClass extends Assert {
 
     @Test
     public void testCollisions() {
-        assertNotNull(registrator.getCollisions(pseudotrack));
+        assertTrue(registrator.getCollisions(pseudotrack).size() > 0);
     }
 }

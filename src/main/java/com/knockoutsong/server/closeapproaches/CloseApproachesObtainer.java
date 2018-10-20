@@ -34,12 +34,17 @@ public class CloseApproachesObtainer {
         LinkedList<ApproachEntity> entities = new LinkedList<>();
         for (JsonElement e : data) {
             JsonArray content = e.getAsJsonArray();
-            entities.addLast(new ApproachEntity(
+
+            ApproachEntity entity = new ApproachEntity(
                     content.get(0).getAsString(),   // about
-                    content.get(5).getAsDouble(),   // min distance
+                    Double.parseDouble( content.get(5).getAsString() ),   // min distance
                     content.get(3).getAsString(),   // date
-                    content.get(10).getAsString()
-            ));
+                    content.get(10).getAsString()   // planet
+            );
+
+            if (entity != null) {
+                entities.addLast(entity);
+            }
         }
         return entities;
     }

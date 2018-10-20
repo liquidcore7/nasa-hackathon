@@ -10,14 +10,14 @@ public class CollisionRegistrator {
 
     private static Map<String, Integer> planetRadius = new HashMap<>();
     static {
-        planetRadius.put("Merc", 2440);
+        planetRadius.put("Mercury", 2440);
         planetRadius.put("Venus", 6052);
         planetRadius.put("Earth", 6378);
         planetRadius.put("Mars", 3397);
-        planetRadius.put("Juptr", 71492);
-        planetRadius.put("Satrn", 60268);
-        planetRadius.put("Urnus", 25559);
-        planetRadius.put("Neptn", 24766);
+        planetRadius.put("Jupiter", 71492);
+        planetRadius.put("Saturn", 60268);
+        planetRadius.put("Uranus", 25559);
+        planetRadius.put("Neptune", 24766);
         planetRadius.put("Pluto", 1150);
         planetRadius.put("Moon", 1738);
     }
@@ -44,6 +44,7 @@ public class CollisionRegistrator {
 
     public List<ApproachEntityAdapter> getCollisions(Double[] positions) {
         return entityList.parallelStream()
+                .filter(ae -> planetRadius.containsKey(ae.getPlanet()))
                 .map(ae -> {
                     try {
                         return new ApproachEntityAdapter(ae, (int) (positions.length * secondsPerPosition));
