@@ -8,6 +8,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+	<repositories>
+		<repository>
+			<id>ImageJ Releases Repository</id>
+			<url>http://maven.imagej.net/content/repositories/releases/</url>
+		</repository>
+	</repositories>
+
 	<name>server</name>
 	<description>Prototype of Knock-out Song server</description>
 
@@ -76,7 +83,7 @@
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithm-fft</artifactId>
-			<version>RELEASE</version>
+			<version>0.2.0</version>
 		</dependency>
 
 	</dependencies>

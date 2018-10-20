@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ApproachEntity {
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static double secondsPerYear = 365.25 * 24 * 60 * 60;
 
 
