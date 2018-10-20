@@ -1,11 +1,17 @@
 package com.knockoutsong.server.closeapproaches;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.stream.Stream;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class CloseApproachesObtainer {
@@ -20,7 +26,21 @@ public class CloseApproachesObtainer {
         ).readLine();
     }
 
-    Stream<ApproachEntity> toStream() {
-        
+    public List<ApproachEntity> toList() {
+        JsonParser parser = new JsonParser();
+        JsonObject globalBody = parser.parse(approaches).getAsJsonObject();
+        JsonArray data = globalBody.getAsJsonArray("data");
+
+        LinkedList<ApproachEntity> entities = new LinkedList<>();
+        for (JsonElement e : data) {
+            JsonArray content = e.getAsJsonArray();
+            entities.addLast(new ApproachEntity(
+                    content.get(0).getAsString(),   // about
+                    content.get(5).getAsDouble(),   // min distance
+                    content.get(3).getAsString(),   // date
+                    content.get(10).getAsString()
+            ));
+        }
+        return entities;
     }
 }
