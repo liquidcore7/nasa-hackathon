@@ -72,7 +72,16 @@
 			<version>2.8.0</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithm-fft</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+
 	</dependencies>
+
+
 
 	<build>
 		<plugins>
