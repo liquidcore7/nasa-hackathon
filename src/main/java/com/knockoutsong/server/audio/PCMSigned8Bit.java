@@ -1,5 +1,6 @@
 package com.knockoutsong.server.audio;
 
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.io.IOException;
  * Created by devnull on 20/10/18.
  */
 public class PCMSigned8Bit extends AbstractSignedLevelConverter {
-
     PCMSigned8Bit(AudioFormat sourceFormat)
     {
         super(sourceFormat);
@@ -24,5 +24,4 @@ public class PCMSigned8Bit extends AbstractSignedLevelConverter {
 
         return (double)chunk[0];
     }
-
 }

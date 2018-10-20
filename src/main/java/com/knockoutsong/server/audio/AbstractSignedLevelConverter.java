@@ -9,8 +9,7 @@ import java.io.IOException;
 /**
  * Created by devnull on 20/10/18.
  */
-abstract class AbstractSignedLevelConverter {
-
+abstract public class AbstractSignedLevelConverter {
     private AudioFormat srcf;
 
     public AbstractSignedLevelConverter(AudioFormat sourceFormat)
@@ -40,7 +39,7 @@ abstract class AbstractSignedLevelConverter {
         return ais;
     }
 
-    abstract public double convertToLevel(byte[] chunk)  throws IOException;
+    abstract public double convertToLevel(byte[] chunk)  throws IOException, IOException;
 
     public int getRequiredChunkByteSize()
     {

@@ -3,97 +3,81 @@ package com.knockoutsong.server.audio;
 import com.sun.media.sound.FFT;
 
 import javax.sound.sampled.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 
 /**
  * Created by devnull on 20/10/18.
  */
 public class AudioProcessing {
+    final static ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
-    public static void main(String []args){
-
+    public static void main(String[] args) {
         String path = "audio/john_lennon_imagine.wav";
         process(path);
-
-
-
     }
 
-    public static int[] process(String path){
-        File file = new File(path);
-        Clip clip;
-        AudioInputStream stream;
-        SourceDataLine sourceLine;
-        Mixer mixer;
+    public static void process(String path) {
         try {
-            stream = AudioSystem.getAudioInputStream(file);
+            ClassLoader loader = ClassLoader.getSystemClassLoader();
+            File file = new File(loader.getResource(path).getFile());
+
+            AudioInputStream stream = AudioSystem.getAudioInputStream(file);
             AudioFormat format = stream.getFormat();
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-            Mixer.Info[] mixers = AudioSystem.getMixerInfo();
-
-            sourceLine = AudioSystem.getSourceDataLine(format);
-
-            clip = AudioSystem.getClip();
-            clip.open(stream);
+            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+            TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info);
 
 
-            AudioSystem.getTargetDataLine(format).open(format);
+            byte buffer[] = toByteArray(stream);
+            double pitches[] = getFFTData(buffer);
+            Arrays.stream(pitches).forEach(x -> System.out.println(normalize(x)));
 
 
-            FFT fft = new FFT(1, -1);
-
-
-
-            byte[] buffer = new byte[stream.getFormat().getFrameSize()];
-            stream.read(buffer, 0, buffer.length);
-            try{
-                System.out.println(getLevel(stream.getFormat(), buffer));
-            }
-            catch(Exception e){
-                System.out.println("ERROR");
-                e.printStackTrace();
-            }
-
-
-    //        System.out.println(clip.getMicrosecondLength());
-
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+
     }
-    public static double getLevel(AudioFormat af, byte[] chunk) throws IOException {
-        PCMSigned8Bit converter = new PCMSigned8Bit(af);
-        if(chunk.length != converter.getRequiredChunkByteSize())
-            return -1;
+    private static byte[] toByteArray(InputStream inputStream) throws IOException{
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        byte[] buffer = new byte[4096];
+        int len;
 
-        AudioInputStream ais = converter.convert(chunk);
-        ais.read(chunk, 0, chunk.length);
+        while ((len = inputStream.read(buffer))!=-1){
+            os.write(buffer, 0, len);
+        }
 
-        long lSum = 0;
-        for(int i=0; i<chunk.length; i++)
-            lSum = lSum + chunk[i];
 
-        double dAvg = lSum / chunk.length;
-        double sumMeanSquare = 0d;
-
-        for(int j=0; j<chunk.length; j++)
-
-            sumMeanSquare = sumMeanSquare + Math.pow(chunk[j] - dAvg, 2d);
-
-        double averageMeanSquare = sumMeanSquare / chunk.length;
-
-        return (Math.pow(averageMeanSquare,0.5d));
+        return buffer;
     }
 
+    public static double[] getFFTData(byte[] buffer){
+        int sampleSize = buffer.length;
 
+        double[] amplitudes = new double[buffer.length];
+        for (int i = 0; i < buffer.length;i++) {
+            amplitudes[i] = (double)buffer[i];
+        }
+        FFT fft = new FFT(sampleSize / 2, -1);
+        fft.transform(amplitudes);
+        int indexSize = sampleSize / 2;
 
+        int positiveSize = indexSize / 2;
 
-    private double[] getData(Clip clip){
-        //#TODO
-        return null;
+        double[] mag = new double[positiveSize];
+        for (int i = 0; i < indexSize; i += 2) {
+            mag[i / 2] = Math.sqrt(amplitudes[i] * amplitudes[i] + amplitudes[i + 1] * amplitudes[i + 1]);
+        }
+
+        return mag;
+    }
+    private static double normalize(double x){ // sigmoid
+        System.out.println(x);
+        return 1f/(1f + Math.pow(Math.E, (-x/100000)));
     }
 }
