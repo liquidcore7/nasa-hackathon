@@ -17,14 +17,9 @@ import java.util.Arrays;
  * Created by devnull on 20/10/18.
  */
 public class AudioProcessing {
-    final static ClassLoader load = ClassLoader.getSystemClassLoader();
-    static int BUFFER_SIZE;
-    final static int STEP = 100000;
-
-    public static void main(String[] args) {
-        String path = "audio/john_lennon_imagine.wav";
-        process(path);
-    }
+    private final static ClassLoader load = ClassLoader.getSystemClassLoader();
+    private static int BUFFER_SIZE;
+    private final static int STEP = 100000;
 
     public static void process(String path) {
         try {
@@ -40,6 +35,8 @@ public class AudioProcessing {
             System.out.println(clip.getMicrosecondLength());
 
             BUFFER_SIZE = (int)(clip.getMicrosecondLength()/STEP);
+            BUFFER_SIZE += BUFFER_SIZE%8;
+            System.out.println(BUFFER_SIZE);
 
             byte buffer[] = toByteArray(stream);
             double pitches[] = getFFTData(buffer);
@@ -64,7 +61,7 @@ public class AudioProcessing {
         return buffer;
     }
 
-    public static double[] getFFTData(byte[] buffer){
+    private static double[] getFFTData(byte[] buffer){
 
         float[] amplitudes = new float[buffer.length];
         for (int i = 0; i < buffer.length;i++) {
@@ -85,13 +82,13 @@ public class AudioProcessing {
     }
     private static double[] normalize(double x[]){ // linear fucntion
         ArrayList<Double> list = new ArrayList();
-        Arrays.stream(x).forEach(ix -> list.add(ix));
+        Arrays.stream(x).forEach(list::add);
         double max, avg, sum = 0;
         for (double d: list) {
             sum += d;
         }
         avg = sum/list.size();
-        max = list.stream().reduce(0.0, (a, b) -> Math.max(a, b));
+        max = list.stream().reduce(0.0, Math::max);
         System.err.println(avg);
         System.err.println(max);
 
