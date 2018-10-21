@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -21,7 +22,7 @@ public class AudioProcessing {
     private static int BUFFER_SIZE;
     private final static int STEP = 100000;
 
-    public static void process(String path) {
+    public static List<Double> process(String path) {
         try {
             File file = new File(load.getResource(path).getFile());
             AudioInputStream stream = AudioSystem.getAudioInputStream(file);
@@ -34,21 +35,23 @@ public class AudioProcessing {
 
             System.out.println(clip.getMicrosecondLength());
 
-            BUFFER_SIZE = (int)(clip.getMicrosecondLength()/STEP);
-            BUFFER_SIZE += BUFFER_SIZE%8;
+//            BUFFER_SIZE = (int)(clip.getMicrosecondLength()/STEP);
+//            BUFFER_SIZE += BUFFER_SIZE%8;
+            BUFFER_SIZE = 16384;
             System.out.println(BUFFER_SIZE);
 
             byte buffer[] = toByteArray(stream);
             double pitches[] = getFFTData(buffer);
 
             pitches = normalize(pitches);
-
-            Arrays.stream(pitches).forEach(System.out::println);
+            List<Double> list = new ArrayList();
+            Arrays.stream(pitches).forEach(xi -> list.add(xi));
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
+        return null;
     }
     private static byte[] toByteArray(InputStream inputStream) throws IOException{
         ByteArrayOutputStream os = new ByteArrayOutputStream();

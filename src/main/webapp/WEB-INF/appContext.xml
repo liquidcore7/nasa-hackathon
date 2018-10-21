@@ -20,7 +20,7 @@
     </bean>
     <!--<context:property-placeholder location="classpath:application.properties" />-->
     <context:component-scan base-package="com.knockoutsong.*" />
-    <!--<jpa:repositories base-package="de.repository" />-->
+    <jpa:repositories base-package="com.knockoutsong.server.repository" />
     <tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>
