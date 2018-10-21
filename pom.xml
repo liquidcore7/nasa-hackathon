@@ -73,6 +73,13 @@
 			<version>2.8.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.fft</groupId>
+			<artifactId>fft</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/FFT.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 
