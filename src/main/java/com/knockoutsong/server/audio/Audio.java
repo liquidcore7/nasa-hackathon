@@ -16,8 +16,6 @@ public class Audio {
     private String name;
     @Column(nullable = false, columnDefinition = "NCHAR(128)")
     private String path;
-    @Column(columnDefinition = "NCHAR(128)")
-    private String length;
     @Transient
     private List<Double> data;
 
@@ -41,13 +39,6 @@ public class Audio {
         this.path = path;
     }
 
-    public String getLength() {
-        return length;
-    }
-
-    public void setLength(String length) {
-        this.length = length;
-    }
 
     public List<Double> getData() {
         return data;
@@ -61,13 +52,17 @@ public class Audio {
 
     }
 
+    public Audio(String name, String path) {
+        this.name = name;
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         return "Audio{" +
                 "SONG_ID=" + SONG_ID +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +
-                ", length='" + length + '\'' +
                 ", data=" + data +
                 '}';
     }

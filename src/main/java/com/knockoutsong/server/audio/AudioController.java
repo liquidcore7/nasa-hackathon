@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AudioController {
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = {"/", "/home"})
     public static String loadPage(){
         return "home";
+    }
+
+    @RequestMapping(value = "/error")
+    public static String fallTrack(){
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/addAudio/{link}")
