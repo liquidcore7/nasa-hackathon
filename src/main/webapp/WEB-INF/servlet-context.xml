@@ -4,18 +4,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <import resource="appContext.xml" />
-    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix">
             <value>/views/</value>
         </property>
         <property name="suffix">
             <value>.jsp</value>
         </property>
-    </bean>-->
+    </bean>
     <!--<mvc:resources mapping="/resources/**" location="file:${catalina.home}/resources/"/>-->
     <!--<mvc:resources mapping="/" location="" />-->
     <!--<mvc:resources mapping="/pictures/**" location="/"/>-->
-    <!--<mvc:resources mapping="/css/**" location="/css/" />-->
+    <mvc:resources mapping="/css/**" location="/css/" />
     <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
     <!--<mvc:resources mapping="/sass/**" location="/saas/"/>-->
     <mvc:annotation-driven>
